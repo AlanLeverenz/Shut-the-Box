@@ -1,6 +1,6 @@
 $(document).ready(function() { 
 
-// $("#one-dice").hide();
+$(".open-box").hide();
 
 $("#6").css("background-color","brown");
 $("#6").css("color","orange");

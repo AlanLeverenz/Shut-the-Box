@@ -2,12 +2,15 @@
     box-sizing: border-box;
 }
 
-.shut-box {
-    width: 510px;
-    height: 240px;
-    background-color: rgb(38, 209, 38);
-    border: 15px solid #fab535;
-    margin-bottom: 20px;
+h1, h2 {
+    text-align: center;
+    font-family: 'Arbutus Slab', serif;
+    color: #01657e;
+}
+
+h3 {
+    font-family: 'Cabin', sans-serif; 
+    text-align: center;
 }
 
 .jumbotron {
@@ -18,22 +21,43 @@
     padding: 32px 0;
 }
 
-h1, h2 {
-    text-align: center;
-    font-family: 'Arbutus Slab', serif;
+.open-box {
+    max-width: 510px;
+    height: 240px;
+    background-color: rgb(38, 209, 38);
+    border: 15px solid #fab535;
+    margin-bottom: 20px;
 }
 
-h3 {
-    font-family: 'Cabin', sans-serif; 
-    text-align: center;
-}
-
-.col {
-    width: 10%;
+.shut-box {
+    max-width: 510px;
+    height: 240px;
+    background-image: url(../images/pexels-photo-955454-woodgrain.jpeg);
+    border: 15px solid #fab535;
+    margin-bottom: 20px;
 }
 
 .message {
     font-size: 2em;
+    text-align: center;
+    color: rgb(0, 116, 10);
+}
+
+.dropdown, .name {
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+}
+
+input {
+    font-family: inherit;
+    font-size: 1.5em;
+    width: 8em;
+}
+
+#swap-zone {
+    width: 100%;
+    margin: auto;
 }
 
 .tab {
@@ -45,44 +69,45 @@ h3 {
     font-family: 'Arbutus Slab', serif;
 }
 
+.col {
+    width: 10%;
+}
+
 #display-dice {
     text-align: center;
     padding-top: 30px;
 }
 
 #player-boxes {
-    width: 510px;
+    max-width: 510px;
     border: 5px solid goldenrod;
 }
 
-#player-1 {
+#player-toss-box {
     border-right: 2px solid goldenrod;
     padding: 5px;
-    background-color: #c9c9c9;
 }
 
-#player-2 {
+#player-scores-box {
     border-left: 2px solid goldenrod;
     padding: 5px;
-    background-color: #fdeda5;
+    background-image: linear-gradient( to bottom, #fcf8e9, #fae790 ) ;
 }
 
-#player1-name {
+#player-box-name {
     font-family: 'Cabin', sans-serif;
     color: red;
     text-align: center;
     font-size: 24px;
 }
 
-#player2-name {
-    font-family: 'Cabin', sans-serif;
-    color: blue;
+#player-instruction {
     text-align: center;
-    font-size: 24px;
+    font-family: inherit;
+    font-size: 18px;
 }
-
 .dice {
-    height: 60px;
+    height: 72px;
     text-align: center;
 }
 
@@ -90,3 +115,24 @@ h3 {
     height: 72px;
     text-align: center;
 }
+
+table {
+    font-family: inherit;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  td, th {
+    border-bottom: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+    font-size: 1em;
+  }
+
+  th {
+      color: brown;
+  }
+
+/* tr:nth-child(odd) {
+    background-color: #dddddd;
+  } */
