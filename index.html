@@ -6,8 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Shut The Box</title>
 
-        <!-- Google fonts -->
-        <link href="https://fonts.googleapis.com/css?family=Arbutus+Slab" rel="stylesheet">
+    <!-- Google fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Arbutus+Slab|Cabin|Manjari&display=swap" rel="stylesheet">
 
     <!-- BOOTSTRAP AND FONT-AWESOME LINKS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -20,91 +20,66 @@
 
 <body>
 
-<!-- LAYOUT ============================================
-
-HEADER ====
-
-Game title against a background image
-
-BOX ====
-
-Content = Green felt pattern/color
-
-Border = Wooden pattern/color, thickest on top (for one player game)
-
-NUMBER SLATS ====
-
-Nine wooden slats with hidden matching flip-ups on top
-
-DICE ====
-
-When rolled appear on the left half of the box content, then "roll" to the right half
-
-BUTTONS ====
-
-Roll One, Roll Both
-
-SCORE ====
-
-Wins and Losses
-
--->
-
+<!-- LAYOUT ============================================ -->
 
 <div class="container">
 
     <div class="jumbotron jumbotron-fluid">
         <div class="container">
-          <h1 class="display-4">Shut The Box</h1>
-          <h3 class="lead">A web version of the Old English table game.</h3>
+            <h1 class="display-4">Shut The Box</h1>
+            <p class="message">&nbsp;</p>
         </div>
     </div>
 
-
+    <!-- the tabs -->
     <div class="container shut-box">
         <div class="row tabs">
+            <div class="col tab" id="2">1</div>
+            <div class="col tab" id="2">2</div>
+            <div class="col tab" id="3">3</div>
+            <div class="col tab" id="4">4</div>
+            <div class="col tab" id="5">5</div>
+            <div class="col tab" id="6">6</div>
+            <div class="col tab" id="7">7</div>
+            <div class="col tab" id="8">8</div>
+            <div class="col tab" id="9">9</div>
+        </div>
 
-            <div class="col tab" id="2">
-                2
+        <!-- where thrown dice are displayed -->
+        <div class="row justify-content-md-center" id="display-dice">
+            <div class="col">
+                <img src="assets/images/one_dice.png" id="rolled-dice1" class="rolled-dice">
             </div>
-            <div class="col tab" id="3">
-                3
+            <div class="col">
+                <img src="assets/images/one_dice.png" id="rolled-dice2" class="rolled-dice">
             </div>
-            <div class="col tab" id="4">
-                4
-            </div>
-            <div class="col tab" id="5">
-                5
-            </div>
-            <div class="col tab" id="6">
-                6
-            </div>
-            <div class="col tab" id="7">
-                7
-            </div>
-            <div class="col tab" id="8">
-                    8
-            </div>
-            <div class="col tab" id="9">
-                9
-            </div>
-
         </div>
     </div>
 
-    <div class="container dice">
-        <div class="dice-badge">
-            <button id="one-dice" class="btn" type="button" value="one">
-                <img src="assets/images/one_dice.png" class="dice">
-            </button>
-        </div>
-        <div class="dice-badge">
-            <button id="two-dice" class="btn" type="button" value="two">
-                <img src="assets/images/two-dice.png" class="dice">
-            </button>
+    <div class="container" id="player-boxes">
+        <div class="row justify-content-md-center">
+
+            <div class="col players" id="player-1">
+                <p id="player1-name">Player 1</p>
+                <button id="one-dice" class="btn" type="button">
+                    <img src="assets/images/one_dice.png" class="dice">
+                </button>
+                <button id="two-dice" class="btn" type="button">
+                    <img src="assets/images/two-dice.png" class="dice">
+                </button>
+            </div>
+
+            <div class="col players" id="player-2">
+                <p id="player2-name">Player 2</p>
+                <button id="one-dice" class="btn" type="button">
+                    <img src="assets/images/one_dice.png" class="dice">
+                </button>
+                <button id="two-dice" class="btn" type="button">
+                    <img src="assets/images/two-dice.png" class="dice">
+                </button>
+            </div>
         </div>
     </div>
-
 </div>
 
 
