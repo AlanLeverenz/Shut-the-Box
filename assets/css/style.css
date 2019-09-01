@@ -55,9 +55,13 @@ input {
     width: 8em;
 }
 
-#swap-zone {
+.start-zone, .entry-zone {
     width: 100%;
     margin: auto;
+}
+
+#current-turn {
+    color: brown;
 }
 
 .tab {
@@ -78,7 +82,7 @@ input {
     padding-top: 30px;
 }
 
-#player-boxes {
+.player-zone {
     max-width: 510px;
     border: 5px solid goldenrod;
 }
@@ -94,20 +98,30 @@ input {
     background-image: linear-gradient( to bottom, #fcf8e9, #fae790 ) ;
 }
 
-#player-box-name {
+#player-instruction-label {
     font-family: 'Cabin', sans-serif;
-    color: red;
+    color: brown;
     text-align: center;
     font-size: 24px;
 }
 
-#player-instruction {
+#player-instructions {
     text-align: center;
     font-family: inherit;
     font-size: 18px;
 }
 .dice {
     height: 72px;
+    text-align: center;
+}
+
+/* test */
+#dice1, #dice2 {
+    font-size: 3em;
+}
+
+
+#my-dice {
     text-align: center;
 }
 
@@ -123,16 +137,16 @@ table {
   }
   
   td, th {
-    border-bottom: 1px solid #dddddd;
     text-align: left;
-    padding: 8px;
+    padding: 6px;
     font-size: 1em;
+  }
+
+  td {
+    border-bottom: 1px solid #fcc591;
   }
 
   th {
       color: brown;
   }
 
-/* tr:nth-child(odd) {
-    background-color: #dddddd;
-  } */

@@ -31,41 +31,37 @@
         </div>
 
         <!-- OPENING MESSAGE ASKS FOR PLAYER COUNT -->
-
-        <!-- <div id="swap-zone">
+        <div class="start-zone">
             <p class="message">How many players?</p>
             <div class="dropdown">
                 <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Players
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <button class="dropdown-item" href="#">1</button>
-                    <button class="dropdown-item" href="#">2</button>
-                    <button class="dropdown-item" href="#">3</button>
-                    <button class="dropdown-item" href="#">4</button>
+                    <a class="dropdown-item" href="#">1</a>
+                    <a class="dropdown-item" href="#">2</a>
+                    <a class="dropdown-item" href="#">3</a>
+                    <a class="dropdown-item" href="#">4</a>
                 </div>
             </div>
-        </div> -->
+        </div>
 
         <!-- PLAYERS ENTER THEIR NAMES -->
-
-        <div id="swap-zone">
-            <p class="message">Player 1</p>
+        <div class="entry-zone">
+            <p class="message"></p>
             <div class="name row justify-content-md-center">
                 <input id="username" placeholder="Name"/>
                 <button type="button" id="name-entry" class="btn btn-info">Enter</button>
             </div>
         </div>
 
-        <!-- CURRENT PLAYER -->
-
-        <div id="current-turn"><h2></h2></div>
+        <!-- PLAYER TAKING A TURN -->
+        <div id="current-turn"></div>
 
     </div> <!-- end Jumbotron section -->
 
 
     <!-- OPEN BOX WITH NUMBER TABS -->
-
     <div class="container open-box">
         <div class="row tabs">
             <div class="col tab" id="2">1</div>
@@ -80,75 +76,50 @@
         </div>
 
         <!-- BOX AREA WHERE ROLLED DICE APPEAR -->
-
         <div class="row justify-content-md-center" id="display-dice">
-            <div class="col">
-                <img src="assets/images/one_dice.png" id="rolled-dice1" class="rolled-dice">
-            </div>
-            <div class="col">
-                <img src="assets/images/one_dice.png" id="rolled-dice2" class="rolled-dice">
-            </div>
+            <div class="col" id="dice1"></div>
+            <div class="col" id="next"></div>
+            <div class="col" id="dice2"></div>
         </div>
     </div> <!-- end open-box section -->
 
 
     <!-- SHUT-BOX -->
-
     <div class="container shut-box"></div>
 
 
     <!-- PLAYER DICE AND SCORE DIV. APPEARS WHEN ALL PLAYERS HAVE ENTERED THEIR NAMES -->
-
-    <div class="container" id="player-boxes">
+    <div class="container player-zone">
+        <!-- row -->
         <div class="row justify-content-md-center">
 
             <!-- PLAYER CLICK TO ROLL DICE -->
             <div class="col players" id="player-toss-box">
-                <!-- Current player -->
-                <p id="player-box-name">Player 1</p>
+                <!-- Set label for instructions box -->
+                <p id="player-instruction-label"></p>
                 <!-- Player instruction -->
-                <div id="player-instruction">
-                    <p>Click to roll. Again to toss.</p>
-                </div>
-                <!-- Dice button to click twice on -->
-                <button id="one-dice" class="btn" type="button">
-                    <!-- <img src="assets/images/one_dice.png" class="dice"> -->
-                    <!-- <img src="assets/images/two-dice.png" class="dice"> -->
-                    <img src="assets/images/dice2animation.gif" class="dice">
-                </button>
+                <p id="player-instructions"></p>
+                <!-- Dice image is inserted here -->
+                <button id="my-dice" class="btn" type="button"></button>
             </div>
 
             <!--  PLAYER SCORES -->
             <div class="col players" id="player-scores-box">
                 <!-- TABLE -->
-                <table>
-                    <tr>
-                        <th>Player</th>
-                        <th>Score</th>
-                    </tr>
-                    <tr>
-                        <td>Alan</td>
-                        <td>10</td>
-                    </tr>
-                    <tr>
-                        <td>Tess</td>
-                        <td>5</td>
-                    </tr>
-                    <tr>
-                        <td>Eric</td>
-                        <td>8</td>
-                    </tr>
-                    <tr>
-                    </tr>
-                        <td>Bev</td>
-                        <td>-</td>
-                    </tr>
+                <table class="table">
+                    <thead id="table-header">
+                        <tr>
+                            <th>Player</th>
+                            <th>Score</th>
+                            <th>Wins</th>
+                        </tr>
+                    </thead>
+                    <!-- player table rows and columns inserted here -->
                 </table>
 
-
-            </div>
-        </div>
-    </div>
+            </div> <!-- end player-scores-box -->
+        </div> <!-- end player-boxes-row -->
+    </div> <!-- end player-boxes-container -->
 </div>
 
 

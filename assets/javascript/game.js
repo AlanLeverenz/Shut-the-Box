@@ -1,15 +1,228 @@
 $(document).ready(function() { 
 
-$(".open-box").hide();
 
-$("#6").css("background-color","brown");
-$("#6").css("color","orange");
+    // GLOBAL VARIABLES ================================================
 
-// on click on throwing dice, fade in the dice...
-// blink on the available tabs to click on, i.e., equal to one or both dice.
-// when user clicks on one, it changes colors and is not clickable until next turn
-// if 7, 8, 9 taken, make one dice available to throw
+    var playerCount = 0;
+    var playerTotal = 0;
+    var playerTurn = 1;
+    var currentTurn = 0;
+    var playerArray = [];
+    var username = '';
+    var diceImageType = "png";
+    var diceOption = "two";
+
+    var boxDice = { 
+        jif1src: "assets/images/dice1animation2.gif",
+        jif2src: "assets/images/dice2animation.gif",
+        png1src: "assets/images/one_dice.png",
+        png2src: "assets/images/two-dice.png"
+    };
+
+    var boardDice = ["",
+    "assets/images/dice-shadow-1.jpg",
+    "assets/images/dice-shadow-2.jpg",
+    "assets/images/dice-shadow-3.jpg",
+    "assets/images/dice-shadow-4.jpg",
+    "assets/images/dice-shadow-5.jpg",
+    "assets/images/dice-shadow-6.jpg",
+    ];
 
 
+    // FUNCTIONS =======================================================
 
-});
+    // game start
+    var start = function() {
+    $(".open-box").hide();
+    $(".entry-zone").hide();
+    $(".player-zone").hide(); 
+    playerCount = 0;
+    playerTotal = 0;
+    currentTurn = 0;
+    playerArray = [];
+    username = '';
+    diceImageType = "png";
+    diceOption = "two";
+    }
+
+    // open the game board
+    var openGame = function() {
+        // hide and show containers
+        $(".entry-zone").hide();
+        $(".shut-box").hide();
+        $(".open-box").fadeIn(2000);
+        $(".player-zone").fadeIn(2000);
+        
+        // display username in current-turn div
+        username = playerArray[currentTurn];
+        var playerTag = $("<h2>");
+        playerTag.attr("style","color:brown");
+        playerTag.text(username);
+        $("#current-turn").append(playerTag);
+
+        // display username, instruction
+        $("#player-instruction-label").text("Instructions");
+        $("#player-instructions").text("Click once to roll the dice. Click again to drop them in the box.");
+
+        // display dice
+        $("#my-dice").empty();
+        var myImgTag = $("<img>");
+        myImgTag.attr("class","dice");
+        myImgTag.attr("src",boxDice["png2src"]);
+        $("#my-dice").append(myImgTag);
+
+        // display all usernames in the players score box table, with score and win empty td's
+        for ( var j = playerArray.length - 1 ; j > -1 ; j-- ) {
+            username = playerArray[j];
+            var tableRow = $("<tr>");
+
+            var userData = $("<td>");
+            userData.attr("id","user");
+            userData.text(username);
+            tableRow.append(userData);
+
+            var scoreData = $("<td>");
+            scoreData.attr("id","score");
+            tableRow.append(scoreData);
+
+            var winData = $("<td>");
+            winData.attr("id","wins");
+            tableRow.append(winData);
+
+            $("#table-header").after(tableRow);
+        } // end for playerArray
+    } // end openGame
+
+    // throw dice
+    var throwDice = function(num) {
+        if (num === "two") {
+            // display first dice
+            var randomNum1 = Math.floor(Math.random() * 6) + 1;
+            $("#dice1").empty();
+            var myImgTag = $("<img>");
+            myImgTag.attr("class","dice");
+            var mySRC = boardDice[randomNum1];
+            myImgTag.attr("src",mySRC);
+            $("#dice1").append(myImgTag);
+            console.log("DICE 1 = " + randomNum1);
+            
+            // display second dice
+            var randomNum2 = Math.floor(Math.random() * 6) + 1;
+            $("#dice2").empty();
+            var myImgTag = $("<img>");
+            myImgTag.attr("class","dice");
+            var mySRC = boardDice[randomNum2];
+            myImgTag.attr("src",mySRC);
+            $("#dice2").append(myImgTag);
+            console.log("DICE 2 = " + randomNum2);
+
+        } else if (num === "one") {
+            // display first dice
+            var randomNum1 = Math.floor(Math.random() * 6) + 1;
+            $("#dice1").empty();
+            var myImgTag = $("<img>");
+            myImgTag.attr("class","dice");
+            var mySRC = boardDice[randomNum1];
+            myImgTag.attr("src",mySRC);
+            $("#dice1").append(myImgTag);
+            console.log("DICE 1 = " + randomNum1);
+
+        } // end if else if
+
+        // change the message
+        $("#player-instructions").text("Click on the numbers that equal the sum of the dice. Then you get to roll again.");
+
+    }
+
+    // darken clicked tab
+    var flipTab = function() {
+    $("#6").css("background-color","brown");
+    $("#6").css("color","orange");
+    }
+
+
+    // GAME LOADS ======================================================
+
+    start();
+
+
+    // ON CLICK EVENTS =================================================
+
+    // on event to get number of players selected from dropdown list <a>
+    $(document).on("click", "a", function() {
+        // capture list selection, parseInt and change the display
+        playerTotal = parseInt($(this).text());
+        // fade-out start zone
+        $(".start-zone").hide();
+        // fade-in entry zone
+        $(".entry-zone").fadeIn(2000);
+        // set first player in message
+        $(".message").text("Player " + playerTurn);
+    });
+
+    // capture username from button click, store in array, increment playerCount
+    $("#name-entry").click(function() {
+        if ($("#username").val() !== "") {
+            username = capitalize($("#username").val());
+            playerArray.push(username);
+            $("#username").val('');
+            // increment counters
+            playerCount++;
+            if (playerCount === playerTotal) {
+                openGame();
+            } else {
+                playerTurn++;
+                $(".message").text("Player " + playerTurn);
+            }
+        } // end if
+    });
+  
+    // listener for 'enter' in username input
+    $("#username").keypress(function(e) {
+        if (e.which === 13 && $("#username").val() !== "") {
+            username = capitalize($("#username").val());
+            playerArray.push(username);
+            $("#username").val('');
+            // increment counters
+            playerCount++;
+            if (playerCount === playerTotal) {
+                openGame();
+            } else {
+                playerTurn++;
+                $(".message").text("Player " + playerTurn);
+            }
+        } // end if
+    });
+  
+    // Function to capitalize usernames
+    function capitalize(name) {
+        return name.charAt(0).toUpperCase() + name.slice(1);
+    }
+
+    // Function to switch dice image files (toggle png to gif)
+    $(document).on("click", "img", function() { 
+        
+        if (diceImageType === "png") {
+            $("#my-dice").empty();
+            var myImgTag = $("<img>");
+            myImgTag.attr("class","dice");
+            var mySRC = "assets/images/dice2animation.gif";
+            myImgTag.attr("src",mySRC);
+            $("#my-dice").append(myImgTag);
+            diceImageType = "gif";
+            $("#my-dice").blur();
+
+        } else if (diceImageType === "gif") {
+            $("#my-dice").empty();
+            diceImageType = "empty";
+            numDice = "two";
+            $("#my-dice").blur();
+            // throw the dice
+            throwDice(numDice);
+        }
+
+
+    });
+
+
+}); // end document.ready
