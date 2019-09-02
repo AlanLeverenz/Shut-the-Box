@@ -1,7 +1,7 @@
 $(document).ready(function() { 
 
 
-    // GLOBAL VARIABLES ================================================
+    // GLOBAL VARIABLES WHEN LOADING THE URL =========================
 
     var playerCount = 0;
     var playerTotal = 0;
@@ -17,6 +17,7 @@ $(document).ready(function() {
     var username = '';
     var diceImageType = "png";
     var diceOption = "two";
+    var status = "new-players";
 
     var boxDice = { 
         jif1src: "assets/images/dice1animation2.gif",
@@ -39,36 +40,37 @@ $(document).ready(function() {
 
     // FUNCTIONS =======================================================
 
-    // game start
+    // game start upon loading
     var start = function() {
-    $(".open-box").hide();
-    $(".entry-zone").hide();
-    $(".player-zone").hide(); 
-    $(".next").hide();
-    playerCount = 0;
-    playerTotal = 0;
-    playerScore = 0;
-    playerWins = 0;
-    currentTurn = 0;
-    tabNum = 0;
-    diceTotal = 0;
-    clickTotal = 0;
-    prevClickTotal = 0;
-    playerArray = [];
-    username = '';
-    diceImageType = "png";
-    diceOption = "two";
+        $(".open-box").hide();
+        $(".entry-zone").hide();
+        $(".player-zone").hide(); 
+        $(".next").hide();
+        playerCount = 0;
+        playerTotal = 0;
+        playerScore = 0;
+        playerWins = 0;
+        currentTurn = 0;
+        tabNum = 0;
+        diceTotal = 0;
+        clickTotal = 0;
+        prevClickTotal = 0;
+        playerArray = [];
+        tabNumArray = []
+        username = '';
+        diceImageType = "png";
+        diceOption = "two";
+        status = "new-players";
     }
 
-    // FUNCTIONS =========================================================
-
-    // open the game board -----------------------------------------------
+    // open the game board  ---------------------------
     var openGame = function() {
         // initialize variables local to the player
         tabNum = 0;
         diceTotal = 0;
         clickTotal = 0;
         prevClickTotal = 0;
+        tabNumArray = [];
 
         // hide and show containers
         $(".entry-zone").hide();
@@ -94,30 +96,13 @@ $(document).ready(function() {
         myImgTag.attr("src",boxDice["png2src"]);
         $("#my-dice").append(myImgTag);
 
-        // display all usernames in the players score box table, with score and win empty td's
-        for ( var j = playerArray.length - 1 ; j > -1 ; j-- ) {
-            username = playerArray[j];
-            var tableRow = $("<tr>");
+        // setup score box if game has been loaded (new set of players)
+        if (status === "new-players") {
+            setupScoreBox();
+        } // end if 
 
-            var userData = $("<td>");
-            var user = "user-" + j;
-            userData.attr("id",user);
-            userData.text(username);
-            tableRow.append(userData);
-
-            var scoreData = $("<td>");
-            var score = "score-" + j;
-            scoreData.attr("id",score);
-            tableRow.append(scoreData);
-
-            var winData = $("<td>");
-            var wins = "wins-" + j;
-            winData.attr("id",wins);
-            tableRow.append(winData);
-
-            $("#table-header").after(tableRow);
-        } // end for playerArray
     } // end openGame
+
 
     // throw dice returns the sum of the dice ---------------------------------
     var throwDice = function(num) {
@@ -168,11 +153,76 @@ $(document).ready(function() {
             return diceTotal = randomNum1;
 
         } // end if else if
-
     } // end throw dice
 
 
-    // GAME LOADS ======================================================
+    // display new usernames in the players score box table --------------------
+    // with score and win empty td's
+    var setupScoreBox = function () {
+
+        for ( var j = playerArray.length - 1 ; j > -1 ; j-- ) {
+            username = playerArray[j];
+            var tableRow = $("<tr>");
+
+            var userData = $("<td>");
+            // var user = "user";
+            var user = "user-" + j;
+            userData.attr("id",user);
+            userData.text(username);
+            tableRow.append(userData);
+
+            var scoreData = $("<td>");
+            // var score = "score";
+            var score = "score-" + j;
+            scoreData.attr("id",score);
+            tableRow.append(scoreData);
+
+            var winData = $("<td>");
+            // var wins = "wins";
+            var wins = "wins-" + j;
+            winData.attr("id",wins);
+            tableRow.append(winData);
+
+            $("#table-header").after(tableRow);
+
+        } // end for playerArray
+    } // end setupScoreBox function
+    
+
+    // NEW TOSS ---------------------------------------------------
+    var continueTossing = function() {
+        // reset the display - hide, empty board items
+        $(".next").hide();
+        $("#dice1").empty();
+        $("#dice2").empty();
+
+        // reset dice image type
+        diceImageType = "png";
+
+        // store the clickTotal as the previous
+        prevClickTotal = clickTotal;
+        console.log("prevClickTotal = " + prevClickTotal);
+
+        // reset the instructions box
+        $("#player-instruction-label").text("Instructions");
+        $("#player-instructions").text("You know how to click on the dice to roll and throw. Good luck!");
+
+        // display dice
+        $("#my-dice").empty();
+        var myImgTag = $("<img>");
+        myImgTag.attr("class","dice");
+
+        if (diceOption === "two" ) {
+            var mySRC = "assets/images/two-dice.png";
+        } else {
+            var mySRC = "assets/images/one-dice.png";
+        } // end if
+        myImgTag.attr("src",mySRC);
+        $("#my-dice").append(myImgTag);
+    }
+
+
+    // Initial function called when loading =============== GAME START WHEN PAGE LOADED
 
     start();
 
@@ -232,7 +282,7 @@ $(document).ready(function() {
     }
 
 
-    // Click to switch dice image files (toggle png to gif) ------------- DOCUMENT CLICK IMG
+    // Click to switch dice image files (toggle png to gif) ---------- DOCUMENT CLICK IMG
     $(document).on("click", "img", function() { 
         
         if (diceImageType === "png") {
@@ -291,32 +341,53 @@ $(document).ready(function() {
     // Click on the next button to finish the toss/turn ------------------------
     $("#next-toss").click(function() {
 
-        // test if clickTotal is same as diceTotal, if not...
+        // check for extended use of NEXT button....
+            // check game status to know if next player's turn (set below)
+            // or all player's have played and we have a winner (set below)
+            // or a player shut the box
 
-        if (clickTotal !== diceTotal) {
+            // status options are 
+            // "new-turn" -> change player and reset game for new set of tosses
+            // "new-game" -> all players have played. restart from player 1.
+                // if a player filled the tabNumArray, do a 4-second fadeIn, fadeOut of shut-box/open-box.
+            // remember to reset the status to "play"
+
+        if (status === "new-turn" ) {
+            openGame();
+        } else if ( status === "new-game" ) {
+            
+        }
+
+        // test if clickTotal is same as diceTotal, if not, summarize and set status to "new-turn"
+        else if (clickTotal !== diceTotal) {
             console.log("PLAYER TURN OVER");
             console.log("clickTotal (" + clickTotal + ") !== diceTotal (" + diceTotal + ")");
             // get score and post
             playerScore = 45 - prevClickTotal;
             console.log("playerScore = " + playerScore);
-            var sourceNode = "#score-" + currentTurn;
-            // $(sourceNode).text(playerScore);
-            $("#score-0").text(playerScore);
+            var setUserScore = $("[id=score-" + currentTurn + "]");
+            setUserScore.text(playerScore);
 
-            // present the user with a game summary
+            // hide the dice1 and dice2
+            $("#dice1").hide();
+            $("#dice2").hide();
+
+            // change status to "new-turn"
+            status = "new-turn";
+
+            // reset the tabNumArray
+            tabNumArray = [];
 
             // increment to next player index (currentTurn)
             currentTurn++;
+            console.log("currentTurn = " + currentTurn);
             console.log(playerArray[currentTurn]);
-            // open a new game
+
+            // present the user with their game score and instructions
+            $("#player-instruction-label").text("Your score: " + playerScore);
+            $("#player-instructions").text("Good try! Click the Next button again for " + playerArray[currentTurn] + " to have a turn."); 
 
         } else {
-
-        // is the clickTotal the same as the diceTotal?
-        // if not, their turn is over. 
-        // calculate their score (sum of all the tab numbers (45) minus the previous clickTotal)
-        // start with the next player
-        // if last player just played, then declare the winner, ask to continue with another game...
 
         // else ...
 
@@ -327,34 +398,9 @@ $(document).ready(function() {
                 diceOption = "two";
             } // end if includes...
             
-            // reset the display - hide, empty board items
-            $(".next").hide();
-            $("#dice1").empty();
-            $("#dice2").empty();
+            // getup the game board for another throw of the dice (same player)
+            continueTossing();
 
-            // reset dice image type
-            diceImageType = "png";
-
-            // store the clickTotal as the previous
-            prevClickTotal = clickTotal;
-            console.log("prevClickTotal = " + prevClickTotal);
-
-            // reset the instructions box
-            $("#player-instruction-label").text("Instructions");
-            $("#player-instructions").text("Click once to roll the dice. Click again to drop them in the box.");
-
-            // display dice
-            $("#my-dice").empty();
-            var myImgTag = $("<img>");
-            myImgTag.attr("class","dice");
-
-            if (diceOption === "two" ) {
-                var mySRC = "assets/images/two-dice.png";
-            } else {
-                var mySRC = "assets/images/one-dice.png";
-            } // end if
-            myImgTag.attr("src",mySRC);
-            $("#my-dice").append(myImgTag);
         } // end else
     });
 
