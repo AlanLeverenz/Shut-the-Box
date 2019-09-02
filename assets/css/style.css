@@ -5,7 +5,7 @@
 h1, h2 {
     text-align: center;
     font-family: 'Arbutus Slab', serif;
-    color: #01657e;
+    color: dodgerblue;
 }
 
 h3 {
@@ -14,7 +14,7 @@ h3 {
 }
 
 .jumbotron {
-    background-image: linear-gradient( to bottom, #d8f8d4, #73ff73);
+    background-image: linear-gradient( to bottom, white, lightgreen );
     max-width: 510px;
     width: 100%;
     margin: 0 auto;
@@ -24,8 +24,8 @@ h3 {
 .open-box {
     max-width: 510px;
     height: 240px;
-    background-color: rgb(38, 209, 38);
-    border: 15px solid #fab535;
+    background-color: limegreen;
+    border: 15px solid goldenrod;
     margin-bottom: 20px;
 }
 
@@ -33,14 +33,14 @@ h3 {
     max-width: 510px;
     height: 240px;
     background-image: url(../images/pexels-photo-955454-woodgrain.jpeg);
-    border: 15px solid #fab535;
+    border: 15px solid goldenrod;
     margin-bottom: 20px;
 }
 
 .message {
     font-size: 2em;
     text-align: center;
-    color: rgb(0, 116, 10);
+    color: forestgreen;
 }
 
 .dropdown, .name {
@@ -65,12 +65,13 @@ input {
 }
 
 .tab {
-    background-color: #fdeda5;
+    background-color: moccasin;
     border: 1px solid brown;
     height: 72px;
     font-size: 3em;
     padding: 0 30px 2px 10px;
     font-family: 'Arbutus Slab', serif;
+    cursor: pointer;
 }
 
 .col {
@@ -95,7 +96,7 @@ input {
 #player-scores-box {
     border-left: 2px solid goldenrod;
     padding: 5px;
-    background-image: linear-gradient( to bottom, #fcf8e9, #fae790 ) ;
+    background-image: linear-gradient( to bottom, beige, burlywood ) ;
 }
 
 #player-instruction-label {
@@ -142,11 +143,12 @@ table {
     font-size: 1em;
   }
 
-  td {
-    border-bottom: 1px solid #fcc591;
+  #user, td {
+    border-bottom: 1px solid coral;
   }
 
   th {
       color: brown;
+      border: none;
   }
 
