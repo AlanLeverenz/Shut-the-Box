@@ -6,14 +6,15 @@ $(document).ready(function() {
     var playerCount = 0;
     var playerTotal = 0;
     var playerScore = 0;
-    var playerWins = 0;
     var playerTurn = 1;
     var currentTurn = 0;
     var diceTotal = 0;
     var clickTotal = 0;
     var prevClickTotal = 0;
     var tabNum = 0;
+    var winIndex = 0;
     var playerArray = [];
+    var scoreArray = [];
     var username = '';
     var diceImageType = "png";
     var diceOption = "two";
@@ -49,28 +50,34 @@ $(document).ready(function() {
         playerCount = 0;
         playerTotal = 0;
         playerScore = 0;
-        playerWins = 0;
         currentTurn = 0;
         tabNum = 0;
+        winIndex = 0;
         diceTotal = 0;
         clickTotal = 0;
         prevClickTotal = 0;
         playerArray = [];
-        tabNumArray = []
+        tabNumArray = [];
+        scoreArray = [];
         username = '';
         diceImageType = "png";
         diceOption = "two";
         status = "new-players";
+        console.log("GAME STARTING...");
     }
 
-    // open the game board  ---------------------------
+    // open the game board after new player entries.
+    // starting point for new game for next turn or repeat game with same players
     var openGame = function() {
+        console.log("FUNCTION - openGame");
+
         // initialize variables local to the player
         tabNum = 0;
         diceTotal = 0;
         clickTotal = 0;
         prevClickTotal = 0;
         tabNumArray = [];
+        scoreArray = [];
 
         // hide and show containers
         $(".entry-zone").hide();
@@ -106,12 +113,17 @@ $(document).ready(function() {
 
     // throw dice returns the sum of the dice ---------------------------------
     var throwDice = function(num) {
+        console.log("FUNCTION - throwDice");
 
         // change the message
         $("#player-instructions").text("Click on the numbers that equal the sum of the dice. Click the 'Next' button when you are done.");
 
         // show the "Check" button ("next" for moving to next toss/turn )
         $(".next").show();
+
+        // hide the dice1 and dice2
+        $("#dice1").show();
+        $("#dice2").show();
 
         // calculate random dice numbers
         if (num === "two") {
@@ -159,6 +171,7 @@ $(document).ready(function() {
     // display new usernames in the players score box table --------------------
     // with score and win empty td's
     var setupScoreBox = function () {
+        console.log("FUNCTION - setupScorBox");
 
         for ( var j = playerArray.length - 1 ; j > -1 ; j-- ) {
             username = playerArray[j];
@@ -181,6 +194,7 @@ $(document).ready(function() {
             // var wins = "wins";
             var wins = "wins-" + j;
             winData.attr("id",wins);
+            winData.text("0");
             tableRow.append(winData);
 
             $("#table-header").after(tableRow);
@@ -191,6 +205,8 @@ $(document).ready(function() {
 
     // NEW TOSS ---------------------------------------------------
     var continueTossing = function() {
+        console.log("FUNCTION - continueTossing");
+
         // reset the display - hide, empty board items
         $(".next").hide();
         $("#dice1").empty();
@@ -219,8 +235,21 @@ $(document).ready(function() {
         } // end if
         myImgTag.attr("src",mySRC);
         $("#my-dice").append(myImgTag);
-    }
 
+    } // end continueTossing
+
+    // function for determining game winning player ----------------------- return index
+    var winningPlayer = function(scoreArr) {
+        var index = 0;
+        for ( var i = 0 ; i < scoreArr.length ; i++ ) {
+            for ( var j = i + 1 ; j < scoreArr.length ; j++ ) {
+                index = scoreArr[i] < scoreArr[j] ? i : j ; 
+                console.log("index (" + index + ") = score[i] (" + scoreArr[i] + ") < score[j] (" + scoreArr[j] + ")");
+            } // end for j
+        } // end for i
+        console.log("return = " + index);
+        return index;
+    } // end function
 
     // Initial function called when loading =============== GAME START WHEN PAGE LOADED
 
@@ -285,6 +314,8 @@ $(document).ready(function() {
     // Click to switch dice image files (toggle png to gif) ---------- DOCUMENT CLICK IMG
     $(document).on("click", "img", function() { 
         
+        console.log("diceImageType = " + diceImageType);
+
         if (diceImageType === "png") {
             $("#my-dice").empty();
             var myImgTag = $("<img>");
@@ -304,7 +335,7 @@ $(document).ready(function() {
 
         } else if (diceImageType === "gif") {
             $("#my-dice").empty();
-            diceImageType = "empty";
+            diceImageType = "png";
             $("#my-dice").blur();
 
             // throw the dice (update the global diceTotal value)
@@ -328,8 +359,7 @@ $(document).ready(function() {
         // diceTotal was updated in previous event (IMG CLICK)
         // if clickTotal is not greater than diceTotal, colorize the selection
         if (clickTotal <= diceTotal) {
-            $(this).css("background-color","brown");
-            $(this).css("color","orange");
+            $(this).css({"background-color":"brown","color":"orange"});
             // store the permissible tabNum value in the tabNumArray
             tabNumArray.push(tabNum);
             console.log("tabNumArray = " + tabNumArray);
@@ -338,42 +368,97 @@ $(document).ready(function() {
     }); // end click on col.tab
 
 
-    // Click on the next button to finish the toss/turn ------------------------
+    // Click on the next button to finish the toss/turn ------------------TURN ENDED, NEXT ACTION
     $("#next-toss").click(function() {
 
-        // check for extended use of NEXT button....
-            // check game status to know if next player's turn (set below)
-            // or all player's have played and we have a winner (set below)
-            // or a player shut the box
+        if (status === "new-turn" ) {         // =====> SAME GAME, NEXT PLAYER
 
-            // status options are 
-            // "new-turn" -> change player and reset game for new set of tosses
-            // "new-game" -> all players have played. restart from player 1.
-                // if a player filled the tabNumArray, do a 4-second fadeIn, fadeOut of shut-box/open-box.
-            // remember to reset the status to "play"
+            // empty current-turn elements and hide Next button
+            $("#current-turn").empty();
+            $(".next").hide();
+            // reset all tabs to original background color
+            $(".tab").css({"background-color": "moccasin",
+            "color": "black"});
 
-        if (status === "new-turn" ) {
+            // reset status
+            status = "play";
+
+            // openGame function
             openGame();
-        } else if ( status === "new-game" ) {
-            
-        }
 
-        // test if clickTotal is same as diceTotal, if not, summarize and set status to "new-turn"
-        else if (clickTotal !== diceTotal) {
-            console.log("PLAYER TURN OVER");
-            console.log("clickTotal (" + clickTotal + ") !== diceTotal (" + diceTotal + ")");
-            // get score and post
-            playerScore = 45 - prevClickTotal;
-            console.log("playerScore = " + playerScore);
-            var setUserScore = $("[id=score-" + currentTurn + "]");
-            setUserScore.text(playerScore);
+        } else if ( status === "new-game" ) {   // ======> NEW GAME, RESET TO PLAYER 1
+            // reset to player 1
+            currentTurn = 0;
+            // empty current-turn elements and hide Next button
+            $("#current-turn").empty();
+            $(".next").hide();
+            // reset all tabs to original background color
+            $(".tab").css({"background-color": "moccasin",
+            "color": "black"});
+
+            // reset the scores
+            for (i = 0 ; i < playerArray.length ; i++ ) {
+            var setUserScore = $("[id=score-" + i + "]");
+            setUserScore.text('');
+            } // end for
+
+            // reset status
+            status = "play";
+
+            openGame();
+         
+        } // end if new-game
+
+        // test if SHUT THE BOX  ==========================> CHANGE STATUS FOR NEW GAME
+        else if ( (tabNumArray.length === 9) && (diceTotal === clickTotal) ) {
+
+            // present the user with their game score and instructions
+            $("#player-instruction-label").text("Wow! Congrats!");
+            $("#player-instructions").text("Holy Cow! You did it! You shut the game! Click the Next button to start a new game.");
+
+            // push score into scoreArray
+            scoreArray.push(playerScore);
+
+            // update wins
+            var setUserWins = $("[id=wins-" + currentTurn + "]");
+            var wins = parseInt(setUserWins.text());
+            wins++;
+            setUserWins.text(wins);
 
             // hide the dice1 and dice2
             $("#dice1").hide();
             $("#dice2").hide();
 
-            // change status to "new-turn"
-            status = "new-turn";
+            // fade open and shut boxes
+            $(".open-box").hide();
+            $(".shut-box").fadeIn(3000);
+            $(".shut-box").hide();
+            $(".open-box").fadeIn(3000);
+
+            $("#next-toss").show();
+
+            // change status to new-game for next button click
+            status = "new-game";
+
+        } // end if shut the box
+
+
+        // test if clickTotal is same as diceTotal, if not, summarize and set status to "new-turn"
+        else if (clickTotal !== diceTotal) {
+
+            console.log("PLAYER TURN OVER");
+
+            // get score and post
+            playerScore = 45 - prevClickTotal;
+            var setUserScore = $("[id=score-" + currentTurn + "]");
+            setUserScore.text(playerScore);
+
+            // push score into scoreArray
+            scoreArray.push(playerScore);
+
+            // hide the dice1 and dice2
+            $("#dice1").hide();
+            $("#dice2").hide();
 
             // reset the tabNumArray
             tabNumArray = [];
@@ -381,15 +466,40 @@ $(document).ready(function() {
             // increment to next player index (currentTurn)
             currentTurn++;
             console.log("currentTurn = " + currentTurn);
-            console.log(playerArray[currentTurn]);
 
             // present the user with their game score and instructions
             $("#player-instruction-label").text("Your score: " + playerScore);
-            $("#player-instructions").text("Good try! Click the Next button again for " + playerArray[currentTurn] + " to have a turn."); 
+            $("#player-instructions").text("Good try! Click the Next button for " + playerArray[currentTurn] + " to have a turn."); 
 
-        } else {
+            // check if no more players, then process end-of-game messages, etc.
+            if (currentTurn >= playerArray.length) {
+                // if more than one player in the game, find out the winner
+                if ( playerArray.length > 1 ) {
 
-        // else ...
+                    var winIndex = winningPlayer(scoreArray);
+
+                    // update wins
+                    var setUserWins = $("[id=wins-" + winIndex + "]");
+                    var wins = parseInt(setUserWins.text());
+                    wins++;
+                    setUserWins.text(wins);
+
+                    var winner = playerArray[winIndex];
+
+                    $("#player-instruction-label").text("Congrats to " + winner + "!");
+                    $("#player-instructions").text("Hope you all had fun. Click the Next button to start a new game."); 
+
+                } // end if more than one player
+
+                // change status to new-game
+                status = "new-game";
+            } // end if no more players
+
+            else {  // if other players, then continue with a new turn
+                status = "new-turn";
+            } // end else
+
+        } else { // if exception with 7, 8, 9 selected, switch to one dice.
 
             // if 7, 8, 9 selected (in the tabNumArray) then change "diceOption" to "one".
             if ( tabNumArray.includes("7") && tabNumArray.includes("8") && tabNumArray.includes("9")) {
@@ -398,10 +508,10 @@ $(document).ready(function() {
                 diceOption = "two";
             } // end if includes...
             
-            // getup the game board for another throw of the dice (same player)
+            // setup the game board for another throw of the dice (same player)
             continueTossing();
 
         } // end else
-    });
+    }); // click on Next button
 
 }); // end document.ready
