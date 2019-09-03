@@ -12,7 +12,6 @@ $(document).ready(function() {
     var clickTotal = 0;
     var prevClickTotal = 0;
     var tabNum = 0;
-    var winIndex = 0;
     var playerArray = [];
     var scoreArray = [];
     var username = '';
@@ -52,7 +51,6 @@ $(document).ready(function() {
         playerScore = 0;
         currentTurn = 0;
         tabNum = 0;
-        winIndex = 0;
         diceTotal = 0;
         clickTotal = 0;
         prevClickTotal = 0;
@@ -63,13 +61,11 @@ $(document).ready(function() {
         diceImageType = "png";
         diceOption = "two";
         status = "new-players";
-        console.log("GAME STARTING...");
     }
 
     // open the game board after new player entries.
     // starting point for new game for next turn or repeat game with same players
     var openGame = function() {
-        console.log("FUNCTION - openGame");
 
         // initialize variables local to the player
         tabNum = 0;
@@ -113,7 +109,6 @@ $(document).ready(function() {
 
     // throw dice returns the sum of the dice ---------------------------------
     var throwDice = function(num) {
-        console.log("FUNCTION - throwDice");
 
         // change the message
         $("#player-instructions").text("Click on the numbers that equal the sum of the dice. Click the 'Next' button when you are done.");
@@ -135,7 +130,6 @@ $(document).ready(function() {
             var mySRC = boardDice[randomNum1];
             myImgTag.attr("src",mySRC);
             $("#dice1").append(myImgTag);
-            console.log("DICE 1 = " + randomNum1);
             
             // display second dice
             var randomNum2 = Math.floor(Math.random() * 6) + 1;
@@ -145,7 +139,6 @@ $(document).ready(function() {
             var mySRC = boardDice[randomNum2];
             myImgTag.attr("src",mySRC);
             $("#dice2").append(myImgTag);
-            console.log("DICE 2 = " + randomNum2);
 
             // get sum total of dice
             return diceTotal = randomNum1 + randomNum2;
@@ -159,7 +152,6 @@ $(document).ready(function() {
             var mySRC = boardDice[randomNum1];
             myImgTag.attr("src",mySRC);
             $("#dice1").append(myImgTag);
-            console.log("DICE 1 = " + randomNum1);
 
             // get sum total of dice
             return diceTotal = randomNum1;
@@ -171,7 +163,6 @@ $(document).ready(function() {
     // display new usernames in the players score box table --------------------
     // with score and win empty td's
     var setupScoreBox = function () {
-        console.log("FUNCTION - setupScorBox");
 
         for ( var j = playerArray.length - 1 ; j > -1 ; j-- ) {
             username = playerArray[j];
@@ -205,7 +196,6 @@ $(document).ready(function() {
 
     // NEW TOSS ---------------------------------------------------
     var continueTossing = function() {
-        console.log("FUNCTION - continueTossing");
 
         // reset the display - hide, empty board items
         $(".next").hide();
@@ -217,7 +207,6 @@ $(document).ready(function() {
 
         // store the clickTotal as the previous
         prevClickTotal = clickTotal;
-        console.log("prevClickTotal = " + prevClickTotal);
 
         // reset the instructions box
         $("#player-instruction-label").text("Instructions");
@@ -240,16 +229,20 @@ $(document).ready(function() {
 
     // function for determining game winning player ----------------------- return index
     var winningPlayer = function(scoreArr) {
+        var minNum = scoreArr[0]; 
         var index = 0;
-        for ( var i = 0 ; i < scoreArr.length ; i++ ) {
-            for ( var j = i + 1 ; j < scoreArr.length ; j++ ) {
-                index = scoreArr[i] < scoreArr[j] ? i : j ; 
-                console.log("index (" + index + ") = score[i] (" + scoreArr[i] + ") < score[j] (" + scoreArr[j] + ")");
-            } // end for j
-        } // end for i
-        console.log("return = " + index);
+        for ( var i = 0 ; i < scoreArr.length - 1 ; i++ ) {
+                var j = i+1;
+                if (minNum < scoreArr[j]) {
+                    minNum = scoreArr[i];
+                    index = i;
+                } else {
+                    minNum = scoreArr[j];
+                    index = j;
+                }
+            } // end for 
         return index;
-    } // end function
+    } // end winningPlayer function
 
     // Initial function called when loading =============== GAME START WHEN PAGE LOADED
 
@@ -313,8 +306,6 @@ $(document).ready(function() {
 
     // Click to switch dice image files (toggle png to gif) ---------- DOCUMENT CLICK IMG
     $(document).on("click", "img", function() { 
-        
-        console.log("diceImageType = " + diceImageType);
 
         if (diceImageType === "png") {
             $("#my-dice").empty();
@@ -340,7 +331,6 @@ $(document).ready(function() {
 
             // throw the dice (update the global diceTotal value)
             diceTotal = diceTotal + throwDice(diceOption);
-            console.log("diceTotal (click on img) = " + diceTotal);
 
         } // end else if
     }); // end click on dice image
@@ -354,7 +344,6 @@ $(document).ready(function() {
         
         // get total of tabNums
         clickTotal = clickTotal + tabNum;
-        console.log("clickTotal = " + clickTotal);
 
         // diceTotal was updated in previous event (IMG CLICK)
         // if clickTotal is not greater than diceTotal, colorize the selection
@@ -362,7 +351,6 @@ $(document).ready(function() {
             $(this).css({"background-color":"brown","color":"orange"});
             // store the permissible tabNum value in the tabNumArray
             tabNumArray.push(tabNum);
-            console.log("tabNumArray = " + tabNumArray);
         } // end if
 
     }); // end click on col.tab
@@ -414,7 +402,7 @@ $(document).ready(function() {
 
             // present the user with their game score and instructions
             $("#player-instruction-label").text("Wow! Congrats!");
-            $("#player-instructions").text("Holy Cow! You did it! You shut the game! Click the Next button to start a new game.");
+            $("#player-instructions").text("Holy Cow! You did it! You shut the game! Click the 'Next' button to start a new game.");
 
             // push score into scoreArray
             scoreArray.push(playerScore);
@@ -446,8 +434,6 @@ $(document).ready(function() {
         // test if clickTotal is same as diceTotal, if not, summarize and set status to "new-turn"
         else if (clickTotal !== diceTotal) {
 
-            console.log("PLAYER TURN OVER");
-
             // get score and post
             playerScore = 45 - prevClickTotal;
             var setUserScore = $("[id=score-" + currentTurn + "]");
@@ -465,11 +451,10 @@ $(document).ready(function() {
 
             // increment to next player index (currentTurn)
             currentTurn++;
-            console.log("currentTurn = " + currentTurn);
 
             // present the user with their game score and instructions
             $("#player-instruction-label").text("Your score: " + playerScore);
-            $("#player-instructions").text("Good try! Click the Next button for " + playerArray[currentTurn] + " to have a turn."); 
+            $("#player-instructions").text("Good try! Click the 'Next' button for " + playerArray[currentTurn] + " to have a turn."); 
 
             // check if no more players, then process end-of-game messages, etc.
             if (currentTurn >= playerArray.length) {
@@ -487,7 +472,7 @@ $(document).ready(function() {
                     var winner = playerArray[winIndex];
 
                     $("#player-instruction-label").text("Congrats to " + winner + "!");
-                    $("#player-instructions").text("Hope you all had fun. Click the Next button to start a new game."); 
+                    $("#player-instructions").text("Hope you all had fun. Click the 'Next' button to start a new game."); 
 
                 } // end if more than one player
 
