@@ -108,7 +108,7 @@ $(document).ready(function() {
 
 
     // throw dice returns the sum of the dice ---------------------------------
-    var throwDice = function(num) {
+    var throwDice = function(numDice) {
 
         // change the message
         $("#player-instructions").text("Click on the numbers that equal the sum of the dice. Click the 'Next' button when you are done.");
@@ -116,12 +116,12 @@ $(document).ready(function() {
         // show the "Check" button ("next" for moving to next toss/turn )
         $(".next").show();
 
-        // hide the dice1 and dice2
+        // show the dice1 and dice2
         $("#dice1").show();
         $("#dice2").show();
 
         // calculate random dice numbers
-        if (num === "two") {
+        if (numDice === "two") {
             // display first dice
             var randomNum1 = Math.floor(Math.random() * 6) + 1;
             $("#dice1").empty();
@@ -143,7 +143,7 @@ $(document).ready(function() {
             // get sum total of dice
             return diceTotal = randomNum1 + randomNum2;
 
-        } else if (num === "one") {
+        } else if (numDice === "one") {
             // display first dice
             var randomNum1 = Math.floor(Math.random() * 6) + 1;
             $("#dice1").empty();
@@ -227,7 +227,7 @@ $(document).ready(function() {
 
     } // end continueTossing
 
-    // function for determining game winning player ----------------------- return index
+    // function for determining game winning player (lowest score) ------ return index
     var winningPlayer = function(scoreArr) {
         var minNum = scoreArr[0]; 
         var index = 0;
@@ -342,17 +342,13 @@ $(document).ready(function() {
         // get tabNum and add number to clickTotal
         tabNum = parseInt($(this).text());
         
-        // get total of tabNums
-        clickTotal = clickTotal + tabNum;
-
-        // diceTotal was updated in previous event (IMG CLICK)
-        // if clickTotal is not greater than diceTotal, colorize the selection
-        if (clickTotal <= diceTotal) {
+        // update of total of clicked tabNums, but only if <= diceTotal
+        if (clickTotal + tabNum <= diceTotal) {
+            clickTotal = clickTotal + tabNum;
             $(this).css({"background-color":"brown","color":"orange"});
             // store the permissible tabNum value in the tabNumArray
             tabNumArray.push(tabNum);
         } // end if
-
     }); // end click on col.tab
 
 
