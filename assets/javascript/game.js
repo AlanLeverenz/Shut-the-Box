@@ -244,6 +244,17 @@ $(document).ready(function() {
         return index;
     } // end winningPlayer function
 
+    var checkForTie = function(myArr) {
+        for ( i=0 ; i < myArr.length ; i++ ) {
+            for (j=i+1 ; j < myArr.length ; j++ ) {
+                if (myArr[i] === myArr[j]) {
+                return true;
+                } // end if
+            } // end for
+        } // end for
+        return false;
+    } // end function
+
     // Initial function called when loading =============== GAME START WHEN PAGE LOADED
 
     start();
@@ -457,6 +468,15 @@ $(document).ready(function() {
                 // if more than one player in the game, find out the winner
                 if ( playerArray.length > 1 ) {
 
+                    // first, let's check for a tie
+                    var tie = checkForTie(scoreArray);
+                    if ( tie == true ) {
+
+                        $("#player-instruction-label").text("Looks like a tie!");
+                        $("#player-instructions").text("Maybe next time we'll have a winner. Click the 'Next' button to start a new game.");
+
+                    } else {
+                    // now we can see who won
                     var winIndex = winningPlayer(scoreArray);
 
                     // update wins
@@ -469,6 +489,8 @@ $(document).ready(function() {
 
                     $("#player-instruction-label").text("Congrats to " + winner + "!");
                     $("#player-instructions").text("Hope you all had fun. Click the 'Next' button to start a new game."); 
+
+                    } // end else
 
                 } // end if more than one player
 
