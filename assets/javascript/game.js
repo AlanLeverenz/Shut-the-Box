@@ -45,7 +45,10 @@ $(document).ready(function() {
         $(".open-box").hide();
         $(".entry-zone").hide();
         $(".player-zone").hide(); 
+        $(".start-zone").hide();
         $(".next").hide();
+        $(".top-shut-box").fadeOut(4000);
+        $(".start-zone").fadeIn(4000);
         playerCount = 0;
         playerTotal = 0;
         playerScore = 0;
