@@ -75,7 +75,6 @@ $(document).ready(function() {
         clickTotal = 0;
         prevClickTotal = 0;
         tabNumArray = [];
-        scoreArray = [];
 
         // hide and show containers
         $(".entry-zone").hide();
@@ -229,24 +228,45 @@ $(document).ready(function() {
 
     } // end continueTossing
 
-    // function for determining game winning player (lowest score) ------ return index
-    var winningPlayer = function(scoreArr) {
-        var minNum = scoreArr[0]; 
-        var index = 0;
+
+    // function for determining game winning player (lowest score) ------ Winner
+    function winningPlayer (scoreArr) {
+        var lowIndex,minIndex = 0;
+        var lowScore, minScore = parseInt(scoreArr[0]); 
         for ( var i = 0 ; i < scoreArr.length - 1 ; i++ ) {
-                var j = i+1;
-                if (minNum < scoreArr[j]) {
-                    minNum = scoreArr[i];
-                    index = i;
+            console.log(i + ">>>>>");
+            for ( var j = i + 1 ; j < scoreArr.length ; j++ ) {
+                console.log(j + "-----")
+                // compare the i score to each other score (paired comparison)
+                if (lowScore < parseInt(scoreArr[j])) {
+                    console.log(lowScore + " < " + scoreArr[j]);
+                    lowScore = parseInt(scoreArr[i]);
+                    lowIndex = i; // lower number is at the 'i' index
+                    console.log("lowScore = " + lowScore);
+                    console.log("lowIndex = " + lowIndex);
                 } else {
-                    minNum = scoreArr[j];
-                    index = j;
+                    lowScore = parseInt(scoreArr[j]);
+                    lowIndex = j; // reassign index to next array item
+                    console.log("else lowScore = " + lowScore);
+                    console.log("lowIndex = " + j);
                 }
+                // see if the pair's lower score should replace current minimum score
+                if (lowScore < minScore) {
+                    minScore = lowScore;
+                    minIndex = lowIndex; // reassign index to next array item
+                    console.log("reset the minScore = " + minScore);
+                    console.log("minIndex = " + j);
+                }
+            } // end J loop
             } // end for 
-        return index;
+        console.log(scoreArr);
+        console.log("WINNING INDEX: " + minIndex)
+        console.log("WINNING SCORE: " + scoreArr[minIndex]);
+        return minIndex;
     } // end winningPlayer function
 
-    var checkForTie = function(myArr) {
+    // check for a tie function ----------------------------- Tie Scores
+    function checkForTie (myArr) {
         for ( i=0 ; i < myArr.length ; i++ ) {
             for (j=i+1 ; j < myArr.length ; j++ ) {
                 if (myArr[i] === myArr[j]) {
@@ -260,7 +280,6 @@ $(document).ready(function() {
     // Initial function called when loading =============== GAME START WHEN PAGE LOADED
 
     start();
-
 
     // ON CLICK EVENTS =================================================
 
@@ -480,6 +499,7 @@ $(document).ready(function() {
                     } else {
                     // now we can see who won
                     var winIndex = winningPlayer(scoreArray);
+                    console.log("WINNING INDEX = " + winIndex);
 
                     // update wins
                     var setUserWins = $("[id=wins-" + winIndex + "]");
