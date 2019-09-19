@@ -265,7 +265,8 @@ $(document).ready(function() {
         return minIndex;
     } // end winningPlayer function
 
-    // check for a tie function ----------------------------- Tie Scores
+    // check for a tie function ----------------------------- EDIT HERE
+    // could have a tie with higher scores. only compare top two best scores.
     function checkForTie (myArr) {
         for ( i=0 ; i < myArr.length ; i++ ) {
             for (j=i+1 ; j < myArr.length ; j++ ) {
